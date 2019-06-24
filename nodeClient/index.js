@@ -20,6 +20,10 @@ socket.on('connect', () => {
     }
     // Client auth with single key value
     socket.emit('clientAuth', macA);
+    performanceData().then(allPerformanceData => {
+        allPerformanceData.macA = macA;
+        socket.emit('initPerfData', allPerformanceData )
+    })
 
     // start sending over data on interval
     let perfDataInterval = setInterval(() =>{
@@ -27,6 +31,9 @@ socket.on('connect', () => {
             socket.emit('perfData', allPerformanceData )
         })
     }, 1000)
+    socket.on('disconnect' , () => {
+        clearInterval(perfDataInterval);
+    })
 })
 const performanceData = async ( )  => {
         const cpus = os.cpus();
