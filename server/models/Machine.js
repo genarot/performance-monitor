@@ -15,4 +15,4 @@ const MachineSchema = new  mongoose.Schema({
 });
 
 
-module.exports =  new mongoose.Model('Machine', MachineSchema)
+module.exports =  new mongoose.model('Machine', MachineSchema)
