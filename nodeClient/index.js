@@ -13,6 +13,9 @@ socket.on('connect', () => {
     let macA;
     // loop through all the nI for this maching and find a non-internal one
     for (let key  in nI) {
+        // FOr testing purposes!!!
+        macA =  Math.floor(Math.random() * 3) + 1;
+        break;
         if (!nI[key][0].internal) {
             if (nI[key][0].mac === '00:00:00:00:00:00')
                 macA = Math.random().toString(36).substring(2, 15);
@@ -22,7 +25,7 @@ socket.on('connect', () => {
         }
     }
     // Client auth with single key value
-    socket.emit('clientAuth', macA);
+    socket.emit('clientAuth', 'node-client');
     performanceData()
         .then(allPerformanceData => {
             console.log('Emitiendo initPerfData', allPerformanceData);
@@ -64,7 +67,7 @@ const performanceData = async () => {
     return ({
         freeMem, totalMem,
         usedMem, memUsage,
-        osType, upTime, cpuModel, numCores, cpuLoad, cpuSpeed
+        osType, upTime, cpuModel, numCores, cpuLoad, cpuSpeed, isActive: true
     })
 };
 
@@ -78,6 +81,7 @@ function cpuAverage() {
     let totalMs = 0;
     // loop through each core
     cpus.forEach((aCore) => {
+
         // loop through each property of the current core
         for (type in aCore.times) {
             totalMs += aCore.times[type];

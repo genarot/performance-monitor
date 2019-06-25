@@ -5,11 +5,27 @@ const Machine = require('./models/Machine');
 function socketMain(io, socket) {
     console.log('A socket connected!', socket.id);
     socket.on('clientAuth', (key) => {
-        if ( key === 'Genaro') {
+        if ( key === 'node-client') {
             socket.join('clients');
+            socket.on('disconnect', () => {
+                Machine.find({macA: macA}, (err, docs) => {
+                    if (docs.length > 0 ){
+                        // send one last emit to React
+                        docs[0].isActive = false;
+                        io.to('ui').emit('data', docs[0]);
+                    }
+                })
+            })
         } else if ( key  === 'react-client' ) {
             console.log('A react client has been connected!');
             socket.join('ui');
+            Machine.find({}, (err, docs) => {
+                docs.forEach((aMachine) => {
+                    // on Load, assume that all machines are offline
+                    aMachine.isActive =  false;
+                    io.in('ui').emit('data', aMachine);
+                })
+            })
         } else {
             // an invalid client has joined. goodbye
             console.log('invalid client');

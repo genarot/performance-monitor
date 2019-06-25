@@ -12,9 +12,9 @@ const Cpu = ({cpuData}) => {
         <div className={"col-sm-3 cpu"}>
             <h3>CPU Load</h3>
             <div className={classnames(widgetStyle["canvas-wrapper"])}>
-                <canvas className="canvas">
+                <canvas className={cpuData.cpuWidgetID} width={"200"} height={"200"}>
                 </canvas>
-                <div className={widgetStyle["cpu-text"]}>{cpuData.cpuLoad}</div>
+                <div className={widgetStyle["cpu-text"]}>{cpuData.cpuLoad}%</div>
             </div>
         </div>
     )
